@@ -1,13 +1,13 @@
-name: Android APK Build
+name: Build APK
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
-  build-apk:
-    name: Build Android APK
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,8 +19,8 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          distribution: "temurin"
-          java-version: "17"
+          distribution: 'temurin'
+          java-version: '17'
 
       # 3) Gradle izin ver
       - name: Grant execute permission for Gradle
@@ -30,9 +30,9 @@ jobs:
       - name: Build Release APK
         run: ./gradlew assembleRelease
 
-      # 5) APK’yı indirilebilir yap
+      # 5) APK'yi indirilebilir yap
       - name: Upload APK
         uses: actions/upload-artifact@v3
         with:
-          name: app-release-apk
-          path: app/build/outputs/apk/release/*.apk
+          name: app-release
+          path: app/build/outputs/apk/release/app-release.apk
