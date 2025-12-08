@@ -12,21 +12,21 @@ jobs:
 
     steps:
       - name: Repo indir
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Flutter kur
+      - name: Flutter kurulumu
         uses: subosito/flutter-action@v2
         with:
           channel: stable
 
-      - name: Flutter paketlerini yükle
+      - name: Paketleri yükle
         run: flutter pub get
 
-      - name: Keystore olmadan debug apk oluştur
+      - name: Debug APK oluştur
         run: flutter build apk --debug
 
-      - name: APK'yı yükle
-        uses: actions/upload-artifact@v3
+      - name: APK'yı Artifact olarak yükle
+        uses: actions/upload-artifact@v4
         with:
           name: BabilAnaliz-APK
           path: build/app/outputs/flutter-apk/app-debug.apk
