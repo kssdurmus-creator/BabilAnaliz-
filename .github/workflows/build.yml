@@ -11,21 +11,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1) Repo'yu al
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # 2) JDK kur
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           distribution: "temurin"
           java-version: "17"
 
+      # 3) Gradle izin ver
       - name: Grant execute permission for Gradle
         run: chmod +x ./gradlew
 
+      # 4) APK üret
       - name: Build Release APK
         run: ./gradlew assembleRelease
 
+      # 5) APK’yı indirilebilir yap
       - name: Upload APK
         uses: actions/upload-artifact@v3
         with:
