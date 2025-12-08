@@ -1,6 +1,8 @@
-name: Flutter APK Build
+name: Build Flutter APK
 
 on:
+  push:
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -8,30 +10,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Repo’yu al
+      - name: Checkout source
         uses: actions/checkout@v3
 
-      - name: Flutter kur
+      - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: stable
+          flutter-version: '3.22.0'
 
-      - name: Proje klasörüne geç
-        run: cd $GITHUB_WORKSPACE
-
-      - name: pubspec kontrol
-        run: |
-          echo "Bulunan dosyalar:"
-          ls -R .
-
-      - name: Paketleri yükle
+      - name: Install dependencies
         run: flutter pub get
 
-      - name: APK üret
+      - name: Build APK
         run: flutter build apk --release
 
-      - name: APK’yı yükle
-        uses: actions/upload-artifact@v4
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
         with:
-          name: BabilAnaliz_APK
+          name: app-release
           path: build/app/outputs/flutter-apk/app-release.apk
