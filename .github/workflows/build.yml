@@ -9,7 +9,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
@@ -18,12 +18,14 @@ jobs:
 
       - name: Flutter Pub Get
         run: flutter pub get
+        working-directory: ./mobile
 
       - name: Build APK (Release)
         run: flutter build apk --release
+        working-directory: ./mobile
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: BabilAnaliz-APK
-          path: build/app/outputs/flutter-apk/app-release.apk
+          path: mobile/build/app/outputs/flutter-apk/app-release.apk
