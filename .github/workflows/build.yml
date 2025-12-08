@@ -1,9 +1,6 @@
-name: Build APK
+name: Flutter APK Build
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 jobs:
@@ -11,23 +8,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Repo’yu al
         uses: actions/checkout@v3
 
-      - name: Set up JDK
-        uses: actions/setup-java@v3
+      - name: Flutter kur
+        uses: subosito/flutter-action@v2
         with:
-          distribution: 'temurin'
-          java-version: '17'
+          channel: stable
 
-      - name: Grant execute permission for Gradle
-        run: chmod +x ./gradlew
+      - name: Proje klasörüne geç
+        run: cd $GITHUB_WORKSPACE
 
-      - name: Build Release APK
-        run: ./gradlew assembleRelease
+      - name: pubspec kontrol
+        run: |
+          echo "Bulunan dosyalar:"
+          ls -R .
 
-      - name: Upload APK
+      - name: Paketleri yükle
+        run: flutter pub get
+
+      - name: APK üret
+        run: flutter build apk --release
+
+      - name: APK’yı yükle
         uses: actions/upload-artifact@v4
         with:
-          name: app-release
-          path: app/build/outputs/apk/release/app-release.apk
+          name: BabilAnaliz_APK
+          path: build/app/outputs/flutter-apk/app-release.apk
