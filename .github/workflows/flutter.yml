@@ -1,4 +1,4 @@
-name: Flutter APK Build
+name: Build Flutter APK
 
 on:
   push:
@@ -11,22 +11,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Repo indir
+      - name: Checkout source
         uses: actions/checkout@v4
 
-      - name: Flutter kurulumu
+      - name: Set working directory
+        run: echo "WORK_DIR=$(ls -d */ | head -n 1)" >> $GITHUB_ENV
+
+      - name: Print working dir
+        run: echo $WORK_DIR
+
+      - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
 
-      - name: Paketleri yükle
+      - name: Install dependencies
         run: flutter pub get
+        working-directory: ${{ env.WORK_DIR }}
 
-      - name: Debug APK oluştur
-        run: flutter build apk --debug
+      - name: Build APK
+        run: flutter build apk --release
+        working-directory: ${{ env.WORK_DIR }}
 
-      - name: APK'yı Artifact olarak yükle
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: BabilAnaliz-APK
-          path: build/app/outputs/flutter-apk/app-debug.apk
+          path: ${{ env.WORK_DIR }}build/app/outputs/flutter-apk/app-release.apk
