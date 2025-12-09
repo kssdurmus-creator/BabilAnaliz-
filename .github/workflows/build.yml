@@ -16,7 +16,7 @@ jobs:
         with:
           flutter-version: '3.24.0'
 
-      - name: Flutter Pub Get
+      - name: Install Dependencies
         run: flutter pub get
 
       - name: Build APK
