@@ -1,48 +1,29 @@
 name: Build Flutter APK
 
 on:
-  push:
-    branches: [ main ]
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      # isteğe bağlı: eğer özel bir flutter sürüm istersen burayı değiştir
-      FLUTTER_VERSION: "stable"
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Java 17
-    uses: actions/setup-java@v3
-    with:
-      distribution: 'temurin'
-      java-version: '17'
-
-      - name: Install Flutter
+      - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
 
-      - name: Show flutter version
-        run: flutter --version
-
-      - name: Ensure project files and create missing android (flutter create)
-        run: |
-          # Eğer proje kökünde pubspec.yaml varsa flutter create ile android klasörü oluşturur
-          flutter create . --project-name babilanaliz --org com.example || true
-
-      - name: Get Flutter packages
+      - name: Install dependencies
         run: flutter pub get
 
-      - name: Build release APK
-        run: flutter build apk --release --no-shrink
+      - name: Build APK
+        run: flutter build apk --release
 
-      - name: Upload APK artifact
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: babilanaliz-apk
+          name: app-release
           path: build/app/outputs/flutter-apk/app-release.apk
