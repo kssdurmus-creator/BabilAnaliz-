@@ -1,3 +1,5 @@
+name: Build Flutter APK
+
 on:
   workflow_dispatch:
 
@@ -19,15 +21,19 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.24.0'
+          channel: stable
 
+      # çalışılacak dizini mobile olarak ayarlıyoruz
       - name: Install dependencies
         run: flutter pub get
+        working-directory: mobile
 
       - name: Build APK
         run: flutter build apk --release
+        working-directory: mobile
 
       - name: Upload APK
         uses: actions/upload-artifact@v3
         with:
           name: BabilAnaliz-APK
-          path: build/app/outputs/flutter-apk/app-release.apk
+          path: mobile/build/app/outputs/flutter-apk/app-release.apk
