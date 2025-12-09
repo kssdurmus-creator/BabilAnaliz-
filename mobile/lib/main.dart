@@ -1,72 +1,68 @@
 import 'package:flutter/material.dart';
-import 'services/api_service.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const BabilAnalizApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class BabilAnalizApp extends StatelessWidget {
+  const BabilAnalizApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'BabilAnaliz',
-      theme: ThemeData.dark(),
-      home: const PredictionPage(),
+      theme: ThemeData.dark().copyWith(
+        scaffoldBackgroundColor: const Color(0xFF0E0E10),
+        colorScheme: ThemeData.dark().colorScheme.copyWith(
+              primary: const Color(0xFFECB84A),
+            ),
+      ),
+      home: const HomePage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
 
-class PredictionPage extends StatefulWidget {
-  const PredictionPage({super.key});
-
-  @override
-  State<PredictionPage> createState() => _PredictionPageState();
-}
-
-class _PredictionPageState extends State<PredictionPage> {
-  final ApiService api = ApiService();
-  String result = "";
-  final TextEditingController homeController = TextEditingController();
-  final TextEditingController awayController = TextEditingController();
-
-  void _getPrediction() async {
-    final home = homeController.text;
-    final away = awayController.text;
-    if (home.isEmpty || away.isEmpty) return;
-
-    final data = await api.getPrediction(home, away);
-    setState(() {
-      result = "${data['prediction']} (Güven: ${data['confidence']})";
-    });
-  }
-
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("BabilAnaliz")),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            TextField(
-              controller: homeController,
-              decoration: const InputDecoration(labelText: "Ev Sahibi Takım"),
+      appBar: AppBar(
+        title: const Text('BabilAnaliz'),
+        centerTitle: true,
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          const SizedBox(height: 8),
+          const Center(
+            child: Text(
+              'Favori Takımlar',
+              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
             ),
-            TextField(
-              controller: awayController,
-              decoration: const InputDecoration(labelText: "Deplasman Takımı"),
+          ),
+          const SizedBox(height: 24),
+          Card(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            child: ListTile(
+              leading: CircleAvatar(child: Text('B')),
+              title: const Text('FC Barcelona'),
+              subtitle: const Text('LaLiga'),
             ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _getPrediction,
-              child: const Text("Tahmin Al"),
+          ),
+          const SizedBox(height: 12),
+          Card(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            child: ListTile(
+              leading: CircleAvatar(child: Text('R')),
+              title: const Text('Real Madrid CF'),
+              subtitle: const Text('LaLiga'),
             ),
-            const SizedBox(height: 20),
-            Text(result, style: const TextStyle(fontSize: 18)),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
